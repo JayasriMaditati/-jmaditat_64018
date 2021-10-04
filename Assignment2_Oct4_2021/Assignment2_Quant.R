@@ -4,8 +4,7 @@ library(lpSolveAPI)
 
 Weigelt_linear.lp <- make.lp(11,9)
 
-# obj function - min 
-#set.objfn(silver.lp, c(40, 40, 30, 30, .8, .8, .6, .6))
+#obj fn-max
 
 set.objfn(Weigelt_linear.lp, c(420,360,300,420,360,300,420,360,300))
 lp.control(Weigelt_linear.lp,sense='max')
