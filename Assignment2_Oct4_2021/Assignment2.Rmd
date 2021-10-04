@@ -17,8 +17,7 @@ When you click the **Knit** button a document will be generated that includes bo
 library(lpSolveAPI)
 Weigelt_linear.lp <- make.lp(11,9)
 
-# obj function - min 
-#set.objfn(silver.lp, c(40, 40, 30, 30, .8, .8, .6, .6))
+# obj function-max
 
 set.objfn(Weigelt_linear.lp, c(420,360,300,420,360,300,420,360,300))
 lp.control(Weigelt_linear.lp,sense='max')
@@ -71,6 +70,7 @@ You can also embed plots, for example:
 
 ```{r}
 #Alternative method
+library(lpSolveAPI)
 Weigelt.lp.alt <- read.lp("Weigelt.lp")
 Weigelt.lp.alt
 solve(Weigelt.lp.alt)
