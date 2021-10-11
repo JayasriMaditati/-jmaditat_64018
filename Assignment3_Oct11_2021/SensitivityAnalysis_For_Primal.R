@@ -22,16 +22,17 @@ get.dual.solution(Weigelt.lp.primal)
 
 #Sensitivity Analysis
 
-sensitivity_shadowprice<-data.frame(get.sensitivity.rhs(Weigelt.lp.primal)$duals[1:20],
-                  get.sensitivity.rhs(Weigelt.lp.primal)$dualsfrom[1:20],
-                  get.sensitivity.rhs(Weigelt.lp.primal)$dualstill[1:20])
+sensitivity_shadowprice<-data.frame(get.sensitivity.rhs(Weigelt.lp.primal)$duals[1:11],
+                  get.sensitivity.rhs(Weigelt.lp.primal)$dualsfrom[1:11],
+                  get.sensitivity.rhs(Weigelt.lp.primal)$dualstill[1:11])
 names(sensitivity_shadowprice)<-c("Shadow price","Allowable decrease","Allowable increase ")
-row.names(sensitivity_shadowprice)<-c("Square foot1","Square Foot2","Square Foot3","Excess Capacity1","Excess Capacity2","Excess Capacity3","Sales1","Sales2","Sales3","Percent_P1_P2","Percent_P1_P3","P1L","P1M","P1S","P2L","P2M","P2S","P3L","P3M","P3S")
+row.names(sensitivity_shadowprice)<-c("Square foot1","Square Foot2","Square Foot3","Excess Capacity1","Excess Capacity2","Excess Capacity3","Sales1","Sales2","Sales3","Percent_P1_P2","Percent_P1_P3")
 sensitivity_shadowprice
 
 
-sensitivity_ReducedCost<-data.frame( get.sensitivity.obj(Weigelt.lp.primal)$objfrom[1:9],
-                                    get.sensitivity.obj(Weigelt.lp.primal)$objtill[1:9])
+sensitivity_ReducedCost<-data.frame( get.sensitivity.rhs(Weigelt.lp.primal)$duals[12:20],
+                                     get.sensitivity.rhs(Weigelt.lp.primal)$dualsfrom[12:20],
+                                    get.sensitivity.rhs(Weigelt.lp.primal)$dualstill[12:20])
 names(sensitivity_ReducedCost)<-c("Reduced_Cost From","Reduced_Cost To ")
 row.names(sensitivity_ReducedCost)<-c("P1L","P1M","P1S","P2L","P2M","P2S","P3L","P3M","P3S")
 
