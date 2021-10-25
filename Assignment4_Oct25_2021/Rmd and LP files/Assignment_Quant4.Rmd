@@ -1,0 +1,150 @@
+---
+title: "Assignment4"
+author: "Jayasri"
+date: "10/22/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Transportation Problem
+
+Heart Start produces automated external defibrillators (AEDs) in each of two different plants (A and B). The unit production costs and monthly production capacity of the two plants are indicated in the table below. The AEDs are sold through three wholesalers. The shipping cost from each plant to the warehouse of each wholesaler along with the monthly demand from each wholesaler are also indicated in the table. How many AEDs should be produced in each plant, and how should they be distributed to each of the three wholesaler warehouses so as to minimize the combined cost of production and shipping? 
+
+# Solution to the transportation problem through R
+```{r}
+library(lpSolveAPI)
+Transport.lp <- read.lp("Transportation.lp")
+
+```
+# Print the Transporatation Model
+```{r}
+Transport.lp
+solve(Transport.lp)
+```
+
+```{r}
+# Print the Optimum Solution for the model
+get.objective(Transport.lp)
+```
+The Optimum solution for this transporation problem is $132,790 (which is the Minimum combined cost for both production and shipping ) the items from plants to Warehouse
+
+```{r}
+# Print the Optimum values for no. of units produced and shipped from the plant to warehouse 
+dec_Vars<-get.variables(Transport.lp)
+print(paste("The Optimum values for the decision Vars:",as.data.frame(dec_Vars)))
+```
+
+```{r}
+# Print the Optimal values for Constraints to have feasible solution
+Const<-get.constraints(Transport.lp)
+print(paste("The Optimum values for for the constraints:",as.data.frame(Const)))
+```
+
+Observations from the Output, it is quite evident that 
+
+* 100 Units are produced in plant A. It ships 60 units from Plant A to Warehouse 2 and 40 units to Warehouse 3.
+* 110 Units are produced in plant B. It ships 80 units from Plant B to Warehouse 1 and 30 units to Warehouse 3.
+
+For a transportation problem to have a optimum(feasible) solution, its quite essential that supply = demand.
+To maintain that equality assumption, Plant B should produce 110 units instead of 120.
+
+## ALTERNATIVE APPROACH TO SOLVE THE TRANSPORTATION PROBLEM:
+
+Now total Supply(220) > total demand(210) 
+*In order to maintain equality assumption, we can Must add new dummy nodes( with difference of 10 units).
+*This Problem can be solved using alternative approach which is using Dummy Nodes to the Model
+
+# Using Dummy Model Approach
+
+```{r}
+library(lpSolveAPI)
+Transport_dummy.lp <- read.lp("Transportation_Dummy.lp")
+
+```
+
+# Print the Transporatation Model using dummy nodes
+```{r}
+Transport_dummy.lp
+solve(Transport_dummy.lp)
+```
+
+```{r}
+# Print the Optimum Solution for the model using dummy nodes
+get.objective(Transport_dummy.lp)
+```
+
+The optimum solution is 132,790 which is same as the optimum solution in the above approach.
+
+```{r}
+# Print the Optimum values for no. of units produced and shipped from the plant to warehouse 
+decision_Vars<-get.variables(Transport_dummy.lp)
+print(paste("The Optimum values for decision vars:",as.data.frame(decision_Vars)))
+# Print the Optimal values for Constraints to have feasible solution
+Constraints<-get.constraints(Transport_dummy.lp)
+print(paste("The Optimum values for the constraints:",as.data.frame(Constraints)))
+```
+
+We can see that 10 units from plant B is sent to Warehouse 4(which is the dummy node) to maintain the equality assumption. 
+That is 10 units should be shipped to any warehouse as Warehouse 4 is not physically existing to get the optimum solution.
+
+
+
+## 2.Transshipment Problem ( Oil Refineries)
+Oil Distribution: Texxon Oil Distributors, Inc., has three active oil wells in a west Texas oil field. Well 1 has a capacity of 93 thousand barrels per day (TBD), Well 2 can produce 88 TBD, and Well 3 can produce 95 TBD. The company has five refineries along the Gulf Coast, all of which have been operating at stable demand levels. In addition, three pump stations have been built to move the oil along the pipelines from the wells to the refineries. Oil can flow from any one of the wells to any of the pump stations, and from any one of the pump stations to any of the refineries, and Texxon is looking for a minimum cost schedule. The refineries’ requirements are as follows.
+
+# R Solution to the Transshipment Problem
+```{r}
+library(lpSolveAPI)
+Transshipment.lp <- read.lp("Transshipment.lp")
+solve(Transshipment.lp)
+Transshipment.lp
+```
+
+```{r}
+#Print the Optimal solution for the transshipment model
+get.objective(Transshipment.lp)
+```
+
+The (Optimal Value) minimum cost of providing oil to the refineries is 1963.82 (TBD)
+
+```{r}
+get.variables(Transshipment.lp)
+get.constraints(Transshipment.lp)
+```
+OBSERVATIONS FROM THE OUTPUT:
+
+Wells to Pumpstations:
+
+* 93 units of barrels are moved from well 1 to the pumpstation A
+* 86 units of barrels are moved from well 2 to the Pumpstation B
+* 28 units of barrels are moved from well 3 to the pumpstation A
+* 67 units of barrels are moved from well 3 to the pumpstation C
+
+* All the 93 produced oil barrels from well 1 are moved to Pumpstation A.
+* Among the produced 88 oil barrels, 86 oil barrels from well 2 are moved to Pumpstation B.
+* Among 95 units from well 3, 28 units are sent to Pumpstation A and remaining 67 units to C station.
+
+Pumpstations to Refiniries:
+
+So, Pumpstation A has 121 units of barrels , Pumpstation B has 86 units of barrels and Pumpstation C has 95 units. Now we have to move the barrels to Refineries.
+
+* 30 units of barrels are moved from Pumpstation A to  Refinery 1
+* 91 units of barrels are moved from Pumpstation A to  Refinery 4
+* 57 units of barrels are moved from Pumpstation B to  Refinery 2
+* 29 units of barrels are moved from Pumpstation B to  Refinery 3
+* 19 units of barrels are moved from Pumpstation C to  Refinery 3
+* 48 units of barrels are moved from Pumpstation C to  Refinery 5
+
+Transshipment Problem is a special type of transportation problem.
+For this problem to have a optimum(feasible) solution, its quite essential that supply = demand.
+To maintain that equality assumption, Well 2 should produce 86 units of oil barrels instead of 88.
+Well 1 and Well 3 are completely moved to the refineries.
+
+
+
+

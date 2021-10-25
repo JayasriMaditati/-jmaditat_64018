@@ -1,0 +1,22 @@
+Min : 1.52 X1A + 1.60 X1B + 1.40 X1C + 1.70 X2A + 1.63 X2B + 1.55 X2C + 1.45 X3A + 1.57 X3B + 1.30 X3C + 5.15 XAR1 + 5.69 XAR2 + 6.13 XAR3 + 5.63 XAR4 + 5.80 XAR5 + 5.12 XBR1 + 5.47 XBR2 + 6.05 XBR3 + 6.12 XBR4 + 5.71 XBR5 + 5.32 XCR1 + 6.16 XCR2 + 6.25 XCR3 + 6.17 XCR4 + 5.87 XCR5;
+
+
+/* Constraints */
+
+/* Supply */
+X1A + X1B + X1C <= 93;
+X2A + X2B + X2C <= 88;
+X3A + X3B + X3C <= 95;
+
+/* Transshipment Nodes */
+X1A + X2A + X3A = XAR1 + XAR2 + XAR3 + XAR4 + XAR5;
+X1B + X2B + X3B = XBR1 + XBR2 + XBR3 + XBR4 + XBR5;
+X1C + X2C + X3C = XCR1 + XCR2 + XCR3 + XCR4 + XCR5;
+
+
+/* Demand */
+XAR1 + XBR1 + XCR1 = 30;
+XAR2 + XBR2 + XCR2 = 57;
+XAR3 + XBR3 + XCR3 = 48;
+XAR4 + XBR4 + XCR4 = 91;
+XAR5 + XBR5 + XCR5 = 48;
